@@ -1,6 +1,6 @@
 spring:
   application:
-    name: bureau-credit-server
+    name: server
   cloud:
     config:
       uri: http://localhost:8888
