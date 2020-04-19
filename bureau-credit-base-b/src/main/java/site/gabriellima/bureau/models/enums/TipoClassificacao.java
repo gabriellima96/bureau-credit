@@ -1,0 +1,7 @@
+package site.gabriellima.bureau.models.enums;
+
+public enum TipoClassificacao {
+
+    IMOVEIS, MOVEIS, FUNGIVEIS, INFUNGIVEIS, CONSUMIVEIS, INCONSUMIVEIS, DIVISIVEIS, INDIVISIVEIS, MATERIAIS,
+    IMATERIAIS, SINGULARES, COLETIVOS;
+}
