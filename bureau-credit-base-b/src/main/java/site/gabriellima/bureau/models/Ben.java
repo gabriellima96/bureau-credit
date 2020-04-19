@@ -1,14 +1,10 @@
 package site.gabriellima.bureau.models;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import site.gabriellima.bureau.models.enums.TipoClassificacao;
 
 @Data
 @ToString
@@ -23,23 +20,20 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Document
-public class Pessoa {
+public class Ben {
 
-    @JsonIgnore
-    @Id
     @EqualsAndHashCode.Include
+    @Id
     private String id;
 
-    @EqualsAndHashCode.Include
-    private Long pessoaId;
+    @NotNull
+    private String descricao;
+    @NotNull
+    private TipoClassificacao classificacao;
 
-    @Max(9)
-    private String cpf;
-    private LocalDate dataNascimento;
-    private Endereco endereco;
+    @JsonIgnore
+    private String pessoaId;
 
-    @DBRef(lazy = true)
-    private List<Ben> bens;
+    private Double valor;
 
-    private Renda renda;
 }
