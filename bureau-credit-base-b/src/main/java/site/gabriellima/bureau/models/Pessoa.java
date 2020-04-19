@@ -1,6 +1,7 @@
 package site.gabriellima.bureau.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.Max;
@@ -39,7 +40,11 @@ public class Pessoa {
     private Endereco endereco;
 
     @DBRef(lazy = true)
-    private List<Ben> bens;
+    private List<Ben> bens = new ArrayList<>();
 
     private Renda renda;
+
+    public void adicionarBen(Ben ben) {
+        bens.add(ben);
+    }
 }

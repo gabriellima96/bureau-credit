@@ -48,8 +48,9 @@ public class PessoaService {
 
     public void adicionarBen(Long id, Ben ben) {
         Pessoa pessoa = buscarPorId(id);
-        ben.setPessoaId(pessoa.getId());;
-        benRepository.save(ben);
+        ben.setPessoaId(pessoa.getId());
+        pessoa.adicionarBen(benRepository.save(ben));
+        pessoaRepository.save(pessoa);
     }
 
 }
