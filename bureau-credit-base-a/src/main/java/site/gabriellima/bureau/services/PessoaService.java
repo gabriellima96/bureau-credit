@@ -6,12 +6,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import site.gabriellima.bureau.exceptions.ResourceNotFoundException;
 import site.gabriellima.bureau.models.Pessoa;
 import site.gabriellima.bureau.repositories.PessoaRepository;
 
 @Service
 @Slf4j
 public class PessoaService {
+
+    private final static String PESSOA_NOT_FOUND = "Pessoa com id '%s' não encontrada";
 
     private final PessoaRepository pessoaRepository;
 
@@ -23,6 +26,12 @@ public class PessoaService {
     public Page<Pessoa> buscarTudo(Pageable pageable) {
         log.info("Buscando todas as pessoas");
         return pessoaRepository.findAll(pageable);
+    }
+
+    public Pessoa buscarPessoaPorId(Long id) {
+        log.info("Buscando pessoa por id '{}'", id);
+        return pessoaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(PESSOA_NOT_FOUND, id)));
     }
 
 }

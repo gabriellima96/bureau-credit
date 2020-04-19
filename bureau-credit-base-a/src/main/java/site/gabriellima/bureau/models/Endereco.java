@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,6 +37,7 @@ public class Endereco implements Serializable {
     private String cep;
     private String numero;
 
+    @JsonIgnore
     @OneToOne
     @MapsId
     private Pessoa pessoa;

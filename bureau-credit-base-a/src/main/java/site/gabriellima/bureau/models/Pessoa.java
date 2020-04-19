@@ -11,10 +11,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,7 +46,7 @@ public class Pessoa implements Serializable {
     @OneToOne(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Endereco endereco;
 
-    @OneToMany
-    @JoinColumn(name = "pessoa_id")
+    @JsonIgnore
+    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
     private List<Divida> dividas;
 }
