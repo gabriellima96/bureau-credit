@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BureauCreditBaseAApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BureauCreditBaseAApplication.class, args);
-	}
-	
-	@GetMapping("/")
-	public String hello() {
-		return "Hello";
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(BureauCreditBaseAApplication.class, args);
+    }
+
+    @GetMapping("/")
+    public String hello() {
+        return "Hello";
+    }
 
 }
