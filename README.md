@@ -40,6 +40,8 @@ docker-compose up --build
 
 4. Acessar o Eureka: http://localhost:8761
 
+5. Importe o 'bureau-credit.postman_collection.json' no postman e teste os endpoints
+
 
 ## Built With
 
@@ -58,6 +60,24 @@ docker-compose up --build
 * MongoDB
 * Redis
 * FlywayDB
+
+## Endpoints
+
+### Autenticação e Autorização
+
+#### Usuários
+Usuário | Senha | Role | Descrição
+:-----: | :---: | :-----: | :--------: 
+bureaucredit | bureaucredit  | ADMIN | Pode consultar a basea e todas as outras
+bancocredito | bancocredito | CREDITO | Só é possível consultar a baseb e basec
+credit | credit | USER | Só é possível consultar a basec
+
+
+## Architecture
+
+![Arquitetura](https://github.com/gabriellima96/bureau-credit/blob/master/architecture.png)
+
+
 
 ## Author
 
