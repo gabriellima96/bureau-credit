@@ -15,14 +15,12 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/oauth/**").permitAll()
-            .antMatchers("/basea/**").hasRole("ADMIN")
-            .antMatchers("/baseb/**").hasAnyRole("ADMIN", "CREDITO")
+            .antMatchers("/**").hasRole("ADMIN")
             .anyRequest().authenticated();
     }
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-      resources.resourceId(resourceId);
+        resources.resourceId(resourceId);
     }
 }
