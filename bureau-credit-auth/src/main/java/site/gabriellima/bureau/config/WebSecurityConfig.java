@@ -24,9 +24,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("bancocredito").password(encoder.encode("bancocredito"))
-                .roles("CREDITO", "USER").and().withUser("bureaucredit").password(encoder.encode("bureaucredit"))
-                .roles("CREDITO", "USER", "ADMIN").and().withUser("credit").password(encoder.encode("credit"))
-                .roles("USER");
+        auth.inMemoryAuthentication()
+            .withUser("bancocredito")
+            .password(encoder.encode("bancocredito"))
+            .roles("CREDITO", "USER")
+            .and()
+            .withUser("bureaucredit")
+            .password(encoder.encode("bureaucredit"))
+            .roles("CREDITO", "USER", "ADMIN")
+            .and()
+            .withUser("credit")
+            .password(encoder.encode("credit"))
+            .roles("USER");
     }
 }
