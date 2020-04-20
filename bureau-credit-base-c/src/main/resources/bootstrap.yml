@@ -3,4 +3,16 @@ spring:
     name: basec
   cloud:
     config:
-      uri: http://localhost:8888
+      hostname: localhost
+      uri: http://${spring.cloud.config.hostname}:8888
+  redis:
+    host: localhost
+
+eureka:
+  instance:
+    hostname: localhost
+
+security:
+  oauth2:
+    resource:
+      hostname: localhost

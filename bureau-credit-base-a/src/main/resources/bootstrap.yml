@@ -3,4 +3,16 @@ spring:
     name: basea
   cloud:
     config:
-      uri: http://localhost:8888
+      hostname: localhost
+      uri: http://${spring.cloud.config.hostname}:8888
+  datasource:
+    url: jdbc:mysql://localhost:3306/basea?verifyServerCertificate=false&useSSL=false&requireSSL=false
+
+eureka:
+  instance:
+    hostname: localhost
+
+security:
+  oauth2:
+    resource:
+      hostname: localhost
