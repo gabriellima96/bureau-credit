@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: basec
+  cloud:
+    config:
+      uri: http://localhost:8888
