@@ -1,0 +1,310 @@
+version: "3.7"
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - emp-network
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 'basea'
+      MYSQL_DATABASE: basea
+      MYSQL_USER: root
+
+  redis:
+    image: redis:alpine
+    networks:
+      - emp-network
+    ports:
+      - 6379:6379
+  
+  mongo:
+    image: mongo:3.4
+    networks:
+      - emp-network
+    ports:
+      - 27017:27017
+
+  bureau-credit-config:
+    container_name: config
+    build:
+      context: ./bureau-credit-config/
+      dockerfile: Dockerfile
+    image: bureau-credit-config:latest
+    expose:
+      - 8888
+    networks:
+      - emp-network
+    ports:
+      - 8888:8888
+  
+  bureau-credit-server:
+    container_name: server
+    build:
+      context: ./bureau-credit-server/
+      dockerfile: Dockerfile
+    image: bureau-credit-server:latest
+    environment:
+      SPRING_APPLICATION_JSON: '{"spring":{"cloud":{"config":{"hostname":"config"}}}}'
+    entrypoint: /app/bureau-credit-server-entrypoint.sh
+    expose:
+      - 8761
+    networks:
+      - emp-network
+    ports:
+      - 8761:8761
+    links:
+      - bureau-credit-config:bureau-credit-config
+    depends_on:
+      - bureau-credit-config
+  
+  bureau-credit-auth:
+    container_name: auth
+    build:
+      context: ./bureau-credit-auth/
+      dockerfile: Dockerfile
+    image: bureau-credit-auth:latest
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring":{
+          "cloud":{
+            "config":{
+              "hostname":"config"
+            }
+          }
+        },
+        "eureka": {
+          "instance": {
+            "hostname": "server"
+          }
+        }
+      }'
+    entrypoint: /app/bureau-credit-auth-entrypoint.sh
+    expose:
+      - 8084
+    networks:
+      - emp-network
+    ports:
+      - 8084:8084
+    links:
+      - bureau-credit-config:bureau-credit-config
+      - bureau-credit-server:bureau-credit-server
+    depends_on:
+      - bureau-credit-config
+      - bureau-credit-server
+  
+  bureau-credit-gateway:
+    container_name: gateway
+    build:
+      context: ./bureau-credit-gateway/
+      dockerfile: Dockerfile
+    image: bureau-credit-gateway:latest
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring":{
+          "cloud":{
+            "config":{
+              "hostname":"config"
+            }
+          }
+        },
+        "eureka": {
+          "instance": {
+            "hostname": "server"
+          }
+        },
+        "security": {
+          "oauth2": {
+            "resource": {
+              "hostname": "auth"
+            }
+          }
+        },
+        "zuul": {
+          "routes": {
+            "basea": {
+              "path": "/basea/**",
+              "url": "http://basea:8081"
+            },
+            "baseb": {
+              "path": "/baseb/**",
+              "url": "http://baseb:8082"
+            },
+            "basec": {
+              "path": "/basec/**",
+              "url": "http://basec:8083"
+            }
+          } 
+        }
+      }'
+    entrypoint: /app/bureau-credit-gateway-entrypoint.sh
+    expose:
+      - 8080
+    networks:
+      - emp-network
+    ports:
+      - 8080:8080
+    links:
+      - bureau-credit-config:bureau-credit-config
+      - bureau-credit-server:bureau-credit-server
+      - bureau-credit-auth:bureau-credit-auth
+    depends_on:
+      - bureau-credit-config
+      - bureau-credit-server
+      - bureau-credit-auth
+  
+  bureau-credit-base-a:
+    container_name: basea
+    build:
+      context: ./bureau-credit-base-a/
+      dockerfile: Dockerfile
+    image: bureau-credit-base-a:latest
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring":{
+          "cloud":{
+            "config":{
+              "hostname":"config"
+            }
+          },
+          "datasource": {
+            "url": "jdbc:mysql://mysql:3306/basea?verifyServerCertificate=false&useSSL=false&requireSSL=false"
+          }
+        },
+        "eureka": {
+          "instance": {
+            "hostname": "server"
+          }
+        },
+        "security": {
+          "oauth2": {
+            "resource": {
+              "hostname": "auth"
+            }
+          }
+        }
+      }'
+    entrypoint: /app/bureau-credit-base-a-entrypoint.sh
+    expose:
+      - 8081
+    networks:
+      - emp-network
+    ports:
+      - 8081:8081
+    links:
+      - bureau-credit-config:bureau-credit-config
+      - bureau-credit-server:bureau-credit-server
+      - bureau-credit-auth:bureau-credit-auth
+      - mysql:mysql
+    depends_on:
+      - bureau-credit-config
+      - bureau-credit-server
+      - bureau-credit-auth
+      - mysql
+
+  bureau-credit-base-b:
+    container_name: baseb
+    build:
+      context: ./bureau-credit-base-b/
+      dockerfile: Dockerfile
+    image: bureau-credit-base-b:latest
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring":{
+          "cloud":{
+            "config":{
+              "hostname":"config"
+            }
+          },
+          "data": {
+            "mongodb": {
+              "host": "mongo"
+            }
+          }
+        },
+        "eureka": {
+          "instance": {
+            "hostname": "server"
+          }
+        },
+        "security": {
+          "oauth2": {
+            "resource": {
+              "hostname": "auth"
+            }
+          }
+        }
+      }'
+    entrypoint: /app/bureau-credit-base-b-entrypoint.sh
+    expose:
+      - 8082
+    networks:
+      - emp-network
+    ports:
+      - 8082:8082
+    links:
+      - bureau-credit-config:bureau-credit-config
+      - bureau-credit-server:bureau-credit-server
+      - bureau-credit-auth:bureau-credit-auth
+      - mongo:mongo
+    depends_on:
+      - bureau-credit-config
+      - bureau-credit-server
+      - bureau-credit-auth
+      - mongo
+
+  bureau-credit-base-c:
+    container_name: basec
+    build:
+      context: ./bureau-credit-base-c/
+      dockerfile: Dockerfile
+    image: bureau-credit-base-c:latest
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring":{
+          "cloud":{
+            "config":{
+              "hostname":"config"
+            }
+          },
+          "redis": {
+            "host": "redis"
+          }
+        },
+        "eureka": {
+          "instance": {
+            "hostname": "server"
+          }
+        },
+        "security": {
+          "oauth2": {
+            "resource": {
+              "hostname": "auth"
+            }
+          }
+        }
+      }'
+    entrypoint: /app/bureau-credit-base-c-entrypoint.sh
+    expose:
+      - 8083
+    networks:
+      - emp-network
+    ports:
+      - 8083:8083
+    links:
+      - bureau-credit-config:bureau-credit-config
+      - bureau-credit-server:bureau-credit-server
+      - bureau-credit-auth:bureau-credit-auth
+      - redis:redis
+    depends_on:
+      - bureau-credit-config
+      - bureau-credit-server
+      - bureau-credit-auth
+      - redis
+    
+networks:
+  emp-network:
+    driver: bridge
