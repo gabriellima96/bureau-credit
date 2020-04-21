@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import site.gabriellima.bureau.models.enums.TipoRenda;
 
+@Accessors(chain = true)
 @Data
 @ToString
 @AllArgsConstructor
