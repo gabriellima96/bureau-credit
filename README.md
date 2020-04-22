@@ -100,10 +100,15 @@ Exemplo:
 http://localhost:8080/api/oauth/token?grant_type=password&username=bureaucredit&password=bureaucredit
 
 ### Basea
-**Problema**: Base A, é extremamente sensível e deve ser protegida com os maiores níveis de segurança, mas o acesso a esses dados não precisa ser tão performática
+
+**Problema**: Base A, é extremamente sensível e deve ser protegida com os maiores níveis de segurança, mas o acesso a esses dados não 
+precisa ser tão performática
+
 **Dados**: CPF,Nome,Endereço,Lista de dívidas
+
 **Solução**: 
 Nesse cenário a escolha foi o banco MySQL, por ser um banco relacional, tratar as informações mais organizada e apesar de ser um banco relacional, possui uma performance boa.
+
 #### GET http://localhost:8080/api/basea/pessoas
 Buscar uma pessoa por id da basea
 
@@ -138,10 +143,14 @@ Exemplo:
 http://localhost:8080/api/basea/pessoas/1/dividas
 
 ### Baseb
+
 **Problema**: a Base B que também possui dados críticos, mas ao contrário da Base A, o acesso precisa ser um pouco mais rápido. Uma outra característica da Base B é que além de consultas ela é utilizada para extração de dados por meio de algoritmos de aprendizado de máquina
+
 **Dados**:Idade, Lista de bens (Imóveis, etc), Endereço, Fonte de renda
+
 **Solução**: 
 Nesse cenário a escolha foi o banco MongoDB, é possível fazer indexações para otimização a busca e dessa forma uma melhor performance na extração dos dados.
+
 #### GET http://localhost:8080/api/baseb/pessoas
 Buscar uma pessoa por id da baseb
 
@@ -197,11 +206,15 @@ http://localhost:8080/api/baseb/pessoas/1/bens
 
 
 ### Basec
+
 **Problema**: Base C, que não possui nenhum tipo de dado crítico, mas precisa de
 um acesso extremamente rápido
+
 **Dados**: Última consulta do CPF em um Bureau de crédito, Movimentação financeira nesse CPF
+
 **Solução**: 
 Nesse cenário a escolha foi o banco Redis, por ser um banco NoSQL de chave-valor, bem flexível. Tem uma busca extremamente rápida e armazenando as informações em memória.
+
 #### GET http://localhost:8080/api/basec/consultas
 Buscar todas as consultas da basec
 
