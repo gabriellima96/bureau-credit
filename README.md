@@ -107,7 +107,7 @@ precisa ser tão performática
 **Dados**: CPF,Nome,Endereço,Lista de dívidas
 
 **Solução**: 
-Nesse cenário a escolha foi o banco MySQL, por ser um banco relacional, tratar as informações mais organizada e apesar de ser um banco relacional, possui uma performance boa.
+Nesse cenário a escolha foi o banco MySQL, por ser um banco relacional, tratar as informações mais organizada e apesar de ser um banco relacional, possui uma boa performance.
 
 #### GET http://localhost:8080/api/basea/pessoas
 Buscar uma pessoa por id da basea
@@ -149,7 +149,7 @@ http://localhost:8080/api/basea/pessoas/1/dividas
 **Dados**:Idade, Lista de bens (Imóveis, etc), Endereço, Fonte de renda
 
 **Solução**: 
-Nesse cenário a escolha foi o banco MongoDB, é possível fazer indexações para otimização a busca e dessa forma uma melhor performance na extração dos dados.
+Nesse cenário a escolha foi o banco MongoDB, é possível fazer indexações para otimizar a busca, e dessa forma uma melhor performance na extração dos dados.
 
 #### GET http://localhost:8080/api/baseb/pessoas
 Buscar uma pessoa por id da baseb
