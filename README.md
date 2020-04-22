@@ -45,21 +45,21 @@ docker-compose up --build
 
 ## Built With
 
-* Maven
-* Spring Boot
-* Spring Cloud Config
-* Spring Cloud Eureka
-* Spring Cloud Zuul
-* Spring Cloud OAuth2
-* Spring Web
-* Spring Data Redis
-* Spring Data MongoDB
-* Spring Data JPA
-* Lombok
-* MySQL
-* MongoDB
-* Redis
-* FlywayDB
+* Maven - Gerenciador de dependências
+* Spring Boot - Projetos com configurações Mínimas
+* Spring Cloud Config - Configure as aplicações de forma externalizada 
+* Spring Cloud Eureka - Registro e descoberta de serviços
+* Spring Cloud Zuul - Roteador e balanceador de carga nos serviços
+* Spring Cloud OAuth2 - Padrão de autenticação e autorização
+* Spring Web - Aplicações para Web MVC
+* Spring Data Redis - Integração para o banco redis
+* Spring Data MongoDB - Integração para o banco MongoDB
+* Spring Data JPA - Integração para o bancos SQL
+* Lombok - Automatização na criação de getters e setters
+* MySQL - Banco SQL
+* MongoDB - Banco NoSQL
+* Redis - Banco NoSQL em memória
+* FlywayDB - Controle de versão para banco de dados SQL 
 
 ## Endpoints
 
@@ -100,6 +100,10 @@ Exemplo:
 http://localhost:8080/api/oauth/token?grant_type=password&username=bureaucredit&password=bureaucredit
 
 ### Basea
+**Problema**: Base A, é extremamente sensível e deve ser protegida com os maiores níveis de segurança, mas o acesso a esses dados não precisa ser tão performática
+**Dados**: CPF,Nome,Endereço,Lista de dívidas
+**Solução**: 
+Nesse cenário a escolha foi o banco MySQL, por ser um banco relacional, tratar as informações mais organizada e apesar de ser um banco relacional, possui uma performance boa.
 #### GET http://localhost:8080/api/basea/pessoas
 Buscar uma pessoa por id da basea
 
@@ -134,6 +138,10 @@ Exemplo:
 http://localhost:8080/api/basea/pessoas/1/dividas
 
 ### Baseb
+**Problema**: a Base B que também possui dados críticos, mas ao contrário da Base A, o acesso precisa ser um pouco mais rápido. Uma outra característica da Base B é que além de consultas ela é utilizada para extração de dados por meio de algoritmos de aprendizado de máquina
+**Dados**:Idade, Lista de bens (Imóveis, etc), Endereço, Fonte de renda
+**Solução**: 
+Nesse cenário a escolha foi o banco MongoDB, é possível fazer indexações para otimização a busca e dessa forma uma melhor performance na extração dos dados.
 #### GET http://localhost:8080/api/baseb/pessoas
 Buscar uma pessoa por id da baseb
 
@@ -147,7 +155,7 @@ Buscar uma pessoa por id da baseb
 - Authorization - Bearer <access_token>
 
 Exemplo:
-http://localhost:8080/api/baseb/pessoas?size=2&page=1
+http://localhost:8080/api/baseb/pessoas?size=2&page=0
 
 #### PUT http://localhost:8080/api/baseb/pessoas/{id}/renda
 Atualizar a renda de uma pessoa
@@ -189,6 +197,11 @@ http://localhost:8080/api/baseb/pessoas/1/bens
 
 
 ### Basec
+**Problema**: Base C, que não possui nenhum tipo de dado crítico, mas precisa de
+um acesso extremamente rápido
+**Dados**: Última consulta do CPF em um Bureau de crédito, Movimentação financeira nesse CPF
+**Solução**: 
+Nesse cenário a escolha foi o banco Redis, por ser um banco NoSQL de chave-valor, bem flexível. Tem uma busca extremamente rápida e armazenando as informações em memória.
 #### GET http://localhost:8080/api/basec/consultas
 Buscar todas as consultas da basec
 
